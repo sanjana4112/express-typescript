@@ -13,6 +13,11 @@ class UserController {
 		const serviceResponse = await userService.findById(id);
 		res.status(serviceResponse.statusCode).send(serviceResponse);
 	};
+
+	public createUsers: RequestHandler = async (req: Request, res: Response) => {
+		const serviceResponse = await userService.createMany(req.body.users);
+		res.status(serviceResponse.statusCode).send(serviceResponse);
+	};
 }
 
 export const userController = new UserController();
