@@ -20,11 +20,13 @@ export const users: User[] = [
 ];
 
 export class UserRepository {
+	// Return copies so callers can't change the stored users by accident
 	async findAllAsync(): Promise<User[]> {
-		return users;
+		return structuredClone(users);
 	}
 
 	async findByIdAsync(id: number): Promise<User | null> {
-		return users.find((user) => user.id === id) || null;
+		const user = users.find((user) => user.id === id);
+		return user ? structuredClone(user) : null;
 	}
 }
