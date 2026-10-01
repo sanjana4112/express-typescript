@@ -62,4 +62,23 @@ describe("userRepository", () => {
 			expect(result).toBeNull();
 		});
 	});
+
+	describe("createAsync", () => {
+		it("stores the user with the next id and timestamps, and returns a copy", async () => {
+			// Arrange
+			const highestId = Math.max(...users.map((user) => user.id));
+
+			// Act
+			const first = await userRepositoryInstance.createAsync({ name: "Maria", email: "maria@example.com", age: 34 });
+			const second = await userRepositoryInstance.createAsync({ name: "Dev", email: "dev@example.com", age: 28 });
+			first.name = "Changed";
+
+			// Assert
+			expect(first.id).toEqual(highestId + 1);
+			expect(second.id).toEqual(highestId + 2);
+			expect(first.createdAt).toBeInstanceOf(Date);
+			expect(first.updatedAt).toEqual(first.createdAt);
+			expect(users.find((user) => user.id === first.id)?.name).toEqual("Maria");
+		});
+	});
 });
